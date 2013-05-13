@@ -1,10 +1,31 @@
-#import <objc/runtime.h>
+#import "HandleBackspaceButton.h"
 
-typedef void (^DeleteFn)(void);
-static char const * const deleteFnKey = "deleteFnKey";
+// Implement the HandleDelete category
+@implementation UITextField (HandleDelete)
+// Tell the compiler that we'll be handling the getter and setter
+// method of the deleteFn variable
+@dynamic deleteFn;
 
-@interface UITextField (HandleDelete)
-    @property (copy, nonatomic) DeleteFn deleteFn;
-    -(void) handleDeleteButton: (DeleteFn) fn;
+-(void) handleDeleteButton: (DeleteFn) fn {
+    self.deleteFn = fn;
+}
+
+// Implement the UITextview deleteBackword method
+-(void) deleteBackward {
+    int length = [self.text length];
+    if(length > 0) self.text = [self.text substringToIndex:length-1];
+
+    if(self.deleteFn != Nil) self.deleteFn();
+}
+
+// Create the setter method for the block
+- (void) setDeleteFn: (DeleteFn)fn {
+  objc_setAssociatedObject(self, deleteFnKey, fn, OBJC_ASSOCIATION_COPY);
+}
+
+// Create the getter method for the block
+- (DeleteFn)deleteFn {
+  return objc_getAssociatedObject(self, deleteFnKey);
+}
+
 @end
-
