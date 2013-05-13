@@ -1,5 +1,5 @@
 # HandleDeleteButton
-### A small library to dynamically handle the keyboard delete/backspace button
+#### A small library to dynamically handle the iOS keyboard delete/backspace button
 This is a small library created to dynamically handle the delete/backspace button on the iOS keyboard. It implements the `-(void) deleteBackward` function declared in the UITextField which it inherits from the UITextInput protocol.
 
 ## Usage
